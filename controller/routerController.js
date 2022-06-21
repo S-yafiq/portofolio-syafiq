@@ -1,0 +1,18 @@
+const express = require('express')
+const router = express.Router()
+const jwt = require('../helper/jwt')
+const controller = require('./controller')
+const antrian = require('../bull/antrian')
+
+router.post('/admin/register', controller.adminRegister)
+router.post('/admin/login', controller.adminLogin)
+router.post('/anggota/register', controller.anggotaRegister)
+router.post('/anggota/login', controller.anggotaLogin)
+router.get('/buku', controller.getBuku)
+router.post('/add/buku', jwt.verifyTokenAdmin, controller.addBuku)
+router.post('/add/kategori', jwt.verifyTokenAdmin, controller.addKategori)
+router.delete('/delete/buku', jwt.verifyTokenAdmin, controller.deleteBuku)
+router.get('/tampil/peminjaman', jwt.verifyTokenAnggota, controller.all)
+router.post('/peminjaman', jwt.verifyTokenAnggota, antrian.Antri)
+router.post('/pengembalian', jwt.verifyTokenAnggota, controller.pengembalian)
+module.exports = router
